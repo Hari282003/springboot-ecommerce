@@ -23,7 +23,7 @@ public class Product extends Model {
     private String name;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private double price;
 
     @Column(length = 500)
     private String description;

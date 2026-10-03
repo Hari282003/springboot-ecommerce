@@ -85,4 +85,19 @@ public class ProductService {
                 .imageUrl(imageUrl)
                 .build();
     }
+
+    public List<Product> searchProducts(String name) {
+        return productRepository.findByNameContainingIgnoreCaseAndActiveTrue(name);
+    }
+
+    public List<Product> filterByPrice(Double minPrice, Double maxPrice) {
+        return productRepository.findByPriceBetween(minPrice, maxPrice);
+    }
+
+    public org.springframework.data.domain.Page<Product> searchProductsPaginated(
+        String name,
+        org.springframework.data.domain.Pageable pageable) {
+
+        return productRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
 }

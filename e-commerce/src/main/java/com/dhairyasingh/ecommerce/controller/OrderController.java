@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
+import com.dhairyasingh.ecommerce.model.OrderStatus;
 @RestController
 @RequestMapping("/api")
 public class OrderController {
@@ -76,5 +76,17 @@ public class OrderController {
     public ResponseEntity<Order> getOneOrder(@PathVariable String id)
     {
         return ResponseEntity.ok(orderService.getOrder(id));
+    }
+    @PutMapping("/order/{id}/status")
+    public ResponseEntity<Order> updateOrderStatus(
+        @PathVariable String id,
+        @RequestParam OrderStatus status) {
+
+        Order order = orderService.getOrder(id);
+        order.setStatus(status);
+
+        Order updatedOrder = orderService.save(order);
+
+        return ResponseEntity.ok(updatedOrder);
     }
 }

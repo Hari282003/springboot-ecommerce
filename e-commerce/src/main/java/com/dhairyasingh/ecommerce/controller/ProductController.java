@@ -1,29 +1,21 @@
 package com.dhairyasingh.ecommerce.controller;
 
-
-import com.dhairyasingh.ecommerce.dto.ProductRequest;
-import com.dhairyasingh.ecommerce.dto.ProductResponse;
 import com.dhairyasingh.ecommerce.model.Product;
 import com.dhairyasingh.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-
-
-
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/products")
-
 public class ProductController {
+
     private final ProductService productService;
-
-
 
     @GetMapping("/all")
     public List<Product> index() {
@@ -35,11 +27,36 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
-
-
-
     @GetMapping("/latest")
     public List<Product> latestProducts() {
         return productService.getLatestProducts(6);
+    }
+
+    // Search products
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String name) {
+        return productService.searchProducts(name);
+    }
+
+    // Filter products by price
+    @GetMapping("/filter")
+    public List<Product> filterByPrice(
+        @RequestParam Double minPrice,
+        @RequestParam Double maxPrice) {
+
+        return productService.filterByPrice(minPrice, maxPrice);
+    }
+
+    // Search products with pagination
+    @GetMapping("/search/page")
+    public Page<Product> searchProductsPaginated(
+        @RequestParam String name,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+
+        return productService.searchProductsPaginated(
+            name,
+            PageRequest.of(page, size)
+        );
     }
 }

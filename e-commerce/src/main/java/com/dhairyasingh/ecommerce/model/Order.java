@@ -1,7 +1,5 @@
 package com.dhairyasingh.ecommerce.model;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,9 +12,10 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"orderProducts","user"})
+@EqualsAndHashCode(exclude = {"orderProducts", "user"})
 @Table(name = "orders")
-public class Order extends Model{
+public class Order extends Model {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true, nullable = false, updatable = false)
@@ -32,4 +31,9 @@ public class Order extends Model{
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<OrderProduct> orderProducts;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private OrderStatus status = OrderStatus.PENDING;
 }
